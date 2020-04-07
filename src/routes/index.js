@@ -8,6 +8,7 @@ import {
 
 import LoginPage from '../components/login';
 import Registerpage from '../components/register';
+import Dashboardpage from '../components/dashboard';
 
 const NoMatch = ({ location }) => (
     <div>
@@ -25,6 +26,7 @@ export default () => (
         <Switch>
             <Route path="/" exact component={LoginPage} />
             <Route path="/register" exact component={Registerpage} />
+            <Route path="/dashboard" exact component={Dashboardpage} />
             <Route component={NoMatch} />
         </Switch>
     </BrowserRouter>

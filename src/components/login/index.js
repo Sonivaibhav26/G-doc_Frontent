@@ -1,4 +1,6 @@
 import { Form, Input, Button, Checkbox } from 'antd';
+import { Alert } from 'antd';
+import isAuthenticated from './../../helpers/authenticate';
 import { Row, Col } from 'antd';
 import React from 'react'
 import './login.css';
@@ -19,16 +21,52 @@ const tailLayout = {
   },
 };
 
+const alert = (
+  < Alert
+    message="Error"
+    description="Something went wrong please try again"
+    type="error"
+    closable
+  />
+)
+
 export default class Login extends React.Component {
+  state = {
+    error: false,
+  };
+
+  constructor(props) {
+    super(props);
+    if (isAuthenticated()) {
+      this.props.history.push('/dashboard');
+    }
+  }
 
   onFinish = values => {
     let { username, password } = values;
     axios.post(`http://localhost:8080/api/login/`, { username, password })
       .then(res => {
         console.log(res);
+        if (res.status === 200) {
+          this.updateStorage(res.data.token, res.data.username)
+          this.props.history.push('/dashboard');
+        }
         // this.setState({ persons });
       })
+      .catch(err => {
+        console.log("Here");
+          this.setState({
+            error: true,
+          });
+      })
     console.log('Success:', values);
+  };
+
+
+
+  updateStorage = (token, username) => {
+    localStorage.setItem('token', token);
+    localStorage.setItem('username', username);
   };
 
   onFinishFailed = errorInfo => {
@@ -74,10 +112,6 @@ export default class Login extends React.Component {
               <Input.Password />
             </Form.Item>
 
-            <Form.Item {...tailLayout} name="remember" valuePropName="checked">
-              <Checkbox>Remember me</Checkbox>
-            </Form.Item>
-
             <Form.Item {...tailLayout}>
               <Button type="primary" htmlType="submit">Submit</Button>
               <Button type="link" htmlType="button" href='/register/'>
@@ -85,7 +119,7 @@ export default class Login extends React.Component {
                 </Button>
             </Form.Item>
           </Form>
-
+          {this.state.error && alert}
         </Col>
 
       </Row>

@@ -2,6 +2,7 @@ import { Form, Input, Button, Checkbox } from 'antd';
 import { Row, Col } from 'antd';
 import React from 'react'
 import './login.css';
+import axios from 'axios';
 
 const layout = {
   labelCol: {
@@ -18,69 +19,77 @@ const tailLayout = {
   },
 };
 
-const Login = () => {
-  const onFinish = values => {
+export default class Login extends React.Component {
+
+  onFinish = values => {
+    let { username, password } = values;
+    axios.post(`http://localhost:8080/api/login/`, { username, password })
+      .then(res => {
+        console.log(res);
+        // this.setState({ persons });
+      })
     console.log('Success:', values);
   };
 
-  const onFinishFailed = errorInfo => {
+  onFinishFailed = errorInfo => {
     console.log('Failed:', errorInfo);
   };
+  render() {
+    return (
+      <Row className="content" justify="center" align="middle">
 
-  return (
-    <Row className="content" justify="center" align="middle">
-
-      <Col xs={{ span: 11, offset: 1 }} lg={{ span: 6, offset: 2 }}>
-        <Form
-          {...layout}
-          name="basic"
-          initialValues={{
-            remember: true,
-          }}
-          onFinish={onFinish}
-          onFinishFailed={onFinishFailed}
-        >
-          <Form.Item
-            label="Username"
-            name="username"
-            rules={[
-              {
-                required: true,
-                message: 'Please input your username!',
-              },
-            ]}
+        <Col xs={{ span: 11, offset: 1 }} lg={{ span: 6, offset: 2 }}>
+          <Form
+            {...layout}
+            name="basic"
+            initialValues={{
+              remember: false,
+            }}
+            onFinish={this.onFinish}
+            onFinishFailed={this.onFinishFailed}
           >
-            <Input />
-          </Form.Item>
+            <Form.Item
+              label="Username"
+              name="username"
+              rules={[
+                {
+                  required: true,
+                  message: 'Please input your username!',
+                },
+              ]}
+            >
+              <Input />
+            </Form.Item>
 
-          <Form.Item
-            label="Password"
-            name="password"
-            rules={[
-              {
-                required: true,
-                message: 'Please input your password!',
-              },
-            ]}
-          >
-            <Input.Password />
-          </Form.Item>
+            <Form.Item
+              label="Password"
+              name="password"
+              rules={[
+                {
+                  required: true,
+                  message: 'Please input your password!',
+                },
+              ]}
+            >
+              <Input.Password />
+            </Form.Item>
 
-          <Form.Item {...tailLayout} name="remember" valuePropName="checked">
-            <Checkbox>Remember me</Checkbox>
-          </Form.Item>
+            <Form.Item {...tailLayout} name="remember" valuePropName="checked">
+              <Checkbox>Remember me</Checkbox>
+            </Form.Item>
 
-          <Form.Item {...tailLayout}>
-            <Button type="primary" htmlType="submit">
-              Submit
-        </Button>
-          </Form.Item>
-        </Form>
+            <Form.Item {...tailLayout}>
+              <Button type="primary" htmlType="submit">Submit</Button>
+              <Button type="link" htmlType="button" href='/register/'>
+                Register
+                </Button>
+            </Form.Item>
+          </Form>
 
-      </Col>
+        </Col>
 
-    </Row>
-  );
+      </Row>
+    );
+  }
 };
 
-export default Login;

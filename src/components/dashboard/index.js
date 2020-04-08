@@ -1,41 +1,49 @@
-import { Form, Input, Button, Checkbox } from 'antd';
-import { Row, Col , Divider} from 'antd';
+
+import { Row, Col, Divider, Tooltip } from 'antd';
 import React from 'react'
-import { Layout } from 'antd';
 import { Card } from 'antd';
-const { Header, Footer, Sider, Content } = Layout;
+import { Avatar } from 'antd';
+import { Tabs } from 'antd';
+
+
+import { Layout } from 'antd';
+import Recentviews from './../recentviews'
+import AddUser from './../addusers'
+
+const { Header, Content, Sider } = Layout;
+const { TabPane } = Tabs;
 
 const Dashboard = () => {
-  const onFinish = values => {
-    console.log('Success:', values);
-  };
-
-  const onFinishFailed = errorInfo => {
-    console.log('Failed:', errorInfo);
-  };
 
   return (
     <div className="content">
-    <div className="site-card-wrapper">
-    <Row gutter={16}>
-      <Col span={8}>
-        <Card title="Card title" bordered={false}>
-          Card content
+      <Header className="header">
+        <Tooltip placement="bottom" title="Name">
+          <Avatar style={{ color: '#f56a00', backgroundColor: '#fde3cf' }}>U</Avatar>
+        </Tooltip>
+      </Header>
+      <div className="content">
+        <Row gutter={16} >
+          <Col span={16}>
+            <Card title="Card title" bordered={false}>
+              Card content
         </Card>
-      </Col>
-      <Col span={8}>
-        <Card title="Card title" bordered={false}>
-          Card content
-        </Card>
-      </Col>
-      <Col span={8}>
-        <Card title="Card title" bordered={false}>
-          Card content
-        </Card>
-      </Col>
-    </Row>
-  </div>
-  </div>
+          </Col>
+          <Col span={8}>
+            <Card bordered={false}>
+              <Tabs defaultActiveKey="1">
+                <TabPane tab="Recent Views" key="1">
+                  <AddUser />
+                </TabPane>
+                <TabPane tab="Add User" key="2">
+                  <Recentviews />
+                </TabPane>
+              </Tabs>
+            </Card>
+          </Col>
+        </Row>
+      </div>
+    </div>
   );
 };
 

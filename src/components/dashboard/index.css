@@ -1,8 +1,10 @@
 .site-card-wrapper {
     background: #ececec;
     padding: 30px;
+    min-height: 100vh;
   }
 
-  .constent {
+  .content {
+    min-height: 100vh;
     height: 100vh;
 }
